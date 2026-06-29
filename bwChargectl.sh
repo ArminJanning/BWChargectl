@@ -45,7 +45,7 @@ setStatus() {
     elif [[ "$inputStatus" == 0 ]]; then
       msg="Charging Stopped"
     fi
-    echo $msg
+    # echo $msg
     #send notification
     notify "[$currentCharge%]$msg"
   fi
@@ -63,10 +63,7 @@ while :; do
   # 4) Extract current capacity as a number
   currentCharge=$(curl -sS -u "$NODE_EXPORTER_CREDENTIALS" 192.168.250.5:9100/metrics | grep node_power_supply_capacity | grep -v "^#" | awk '{print $2}')
   # 0 for discharging, 1 for charging
-  # currentStatus=$(curl -sS -u "$NODE_EXPORTER_CREDENTIALS" 192.168.250.5:9100/metrics | grep node_power_supply_online | grep -v "^#" | awk '{print $2}')
-
-  echo $currentStatus
-  # echo Current Charge: $currentCharge
+  currentStatus=$(curl -sS -u "$NODE_EXPORTER_CREDENTIALS" 192.168.250.5:9100/metrics | grep node_power_supply_online | grep -v "^#" | awk '{print $2}')
 
   # Verify the received value
   # -> Send a discord notification if 5 consecutive intervals result in an invalid value
